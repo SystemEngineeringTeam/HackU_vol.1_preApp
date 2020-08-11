@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="text-center">
-      <v-col cols="12">
+      <v-col cols="12" v-for="(task,i) in sample" v-bind:key="i">
         <Task />
       </v-col>
     </v-row>

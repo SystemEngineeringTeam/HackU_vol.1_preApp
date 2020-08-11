@@ -20,6 +20,7 @@ type InputJsonSchema struct{
 func Test(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodGet {
+		
 		fmt.Fprintln(w, "Get Method")
 	
 	  } else if r.Method== http.MethodPost{
@@ -33,15 +34,20 @@ func Test(w http.ResponseWriter, r *http.Request) {
 		}
 
 		jsonBytes := ([]byte)(b)
-		data:=json.Unmarshal(jsonBytes,data);err!=nil{
-			fmt.Println("JSON Unmarashal erro",err)
-			return 					
+
+		data:=new(InputJsonSchema)
+		if err:=json.Unmarshal(jsonBytes,data);err!=nil{
+			fmt.Println("JSON Unmarshal error:",err)
+			return
 		}
+
+		fmt.Fprintf(w,"jsonで受け取りました")
+/* 
 		fmt.Fprintf(w,data.In)
 		fmt.Fprintf(w,data.Name)
 		fmt.Fprintf(w,data.Description)
 		fmt.Fprintf(w,data.Required)
-		fmt.Fprintf(w,data.Responses)
+		fmt.Fprintf(w,data.Responses)	 */			
 										
 	  }else if r.Method==http.MethodPut{
 		fmt.Fprintln(w,"Put Method")  			

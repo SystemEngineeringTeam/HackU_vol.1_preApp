@@ -1,50 +1,61 @@
 package apifuncs
 
 import (
-	"encoding/json"
-	"io/ioutil"
+	"log"
+	"encoding/json"	
 	"fmt"
 	"net/http"
 )
 
 
-type InputJsonSchema struct{
 
-	In string `json:"in"`
+// TasksResponseMethodGET は/taskでメソッドがgetだったら返す　
+type TasksResponseMethodGET struct{	
+
+	ID int `json:"id"`
 	Name string `json:"name"`
-	Description string `json:"desciption"`
-	Required bool `json:"required"`
-	Responses string `schema:"responses"`
+	Deadline string `json:"deadline"`
+	Users []string `json:"users"`
+
 }
 
+
+
+// Test はテスト用
 func Test(w http.ResponseWriter, r *http.Request) {
 
-	if r.Method == http.MethodGet {
+	if r.Method == http.MethodGet {		
 
-		Jsontype:=InputJsonSchema{"in","Name","desciption",true,"responses"}
+		response:=TasksResponseMethodGET{ID:0,Name:"test",Deadline:"dead",Users:[]string{"hukuda","toyama"}}
 
-		fmt.Fprintln(w,Jsontype)
-		
-		fmt.Fprintln(w, "Get Method")
-		
+		//構造体をバイト配列にする
+		b, _ := json.Marshal(response)
+								
+		fmt.Printf("%s\n", string(b))
+
+		//バイトは配列stringにキャスト
+		fmt.Fprintln(w,string(b))
+
+				
+		log.Println( "Get Method")		
 			
 	  } else if r.Method== http.MethodPost{
 		fmt.Fprintln(w, "Post Method")
 
 
-		b, err:=ioutil.ReadAll(r.Body)
+		/* b, err:=ioutil.ReadAll(r.Body)
 		if err !=nil{
 			fmt.Println("io error")
 			return 
-		}
+		} */
 
-		jsonBytes := ([]byte)(b)
+		//jsonBytes := ([]byte)(b)
 
-		data:=new(InputJsonSchema)
+		/* data:=new(InputJsonSchema)
 		if err:=json.Unmarshal(jsonBytes,data);err!=nil{
 			fmt.Println("JSON Unmarshal error:",err)
 			return
-		}
+		} */
 
 		fmt.Fprintf(w,"jsonを受け取りました")
 /* 

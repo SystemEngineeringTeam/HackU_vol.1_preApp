@@ -34,23 +34,23 @@
     </v-app-bar>
 
     <v-main>
-      <HelloWorld />
+      <ToDo />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+import ToDo from "./pages/ToDo";
 
 export default {
   name: "App",
 
   components: {
-    HelloWorld
+    ToDo,
   },
 
   data: () => ({
     //
-  })
+  }),
 };
 </script>

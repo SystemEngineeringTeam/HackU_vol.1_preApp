@@ -1,14 +1,17 @@
 <template>
   <v-card>
     <v-card-title class="justify-center">
-      タスク
+      {{ task.title }}
     </v-card-title>
     <v-card-subtitle>
-      8/13 21:00
+      {{ task.deadline }}
     </v-card-subtitle>
     <v-card-text>
+      <!-- <span v-for="(userId, i) in task.users" :key="i">
+        {{ users.find((user) => user.id == userId).name }}
+      </span> -->
       <span v-for="(user, i) in users" :key="i">
-        {{user}}
+        {{ user }}
       </span>
     </v-card-text>
   </v-card>
@@ -16,10 +19,8 @@
 
 <script>
 export default {
-  name: "Task",
+  props: ["task", "users"],
 
-  data: () => ({
-    users: ["けんしん","福田","あいはた","とやま"]
-  }),
+  data: () => ({}),
 };
 </script>

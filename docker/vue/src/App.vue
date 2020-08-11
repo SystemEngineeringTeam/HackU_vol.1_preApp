@@ -46,11 +46,11 @@ export default {
   name: "App",
 
   components: {
-    ToDo
+    ToDo,
   },
 
   data: () => ({
     //
-  })
+  }),
 };
 </script>

@@ -116,7 +116,7 @@ definitions:
       properties:
         id:
           type: "integer"
-        name:
+        title:
           type: "string"
         deadline:
           type: "string"
@@ -127,11 +127,11 @@ definitions:
   TaskCreateRequest:
     type: "object"
     properties:
-      name:
+      title:
         type: "string"
       deadline:
         type: "string"
-      users:
+      users_id:
         type: "array"
         items:
           type: "integer"

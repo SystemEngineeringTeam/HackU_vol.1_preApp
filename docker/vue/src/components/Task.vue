@@ -7,13 +7,14 @@
       {{ task.deadline }}
     </v-card-subtitle>
     <v-card-text>
-      <!-- <span v-for="(userId, i) in task.users" :key="i">
-        {{ users.find((user) => user.id == userId).name }}
-      </span> -->
       <span v-for="(user, i) in users" :key="i">
         {{ user }}
       </span>
     </v-card-text>
+    <v-card-actions class="justify-center">
+      <v-btn>更新</v-btn>
+      <v-btn>削除</v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 

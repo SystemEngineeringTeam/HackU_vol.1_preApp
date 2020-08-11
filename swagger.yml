@@ -131,7 +131,7 @@ definitions:
         type: "string"
       deadline:
         type: "string"
-      users:
+      users_id:
         type: "array"
         items:
           type: "integer"

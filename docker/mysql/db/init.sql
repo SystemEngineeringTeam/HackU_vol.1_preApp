@@ -1,14 +1,14 @@
 use pre_app_db;
 
 create table users(
-    user_id int auto_increment not null primary key,
-    user_name varchar(128) not null
+    id int auto_increment not null primary key,
+    name varchar(128) not null
 );
 
 create table tasks(
-    task_id int auto_increment not null primary key,
+    id int auto_increment not null primary key,
     title varchar(128) not null,
-    deadline datetime not null
+    deadline datetime
 );
 
 create table links_table(

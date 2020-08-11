@@ -27,13 +27,14 @@ services:
             WAIT_HOSTS: mysql
     vue:
         build: ./vue
+        volumes:
+            - "./vue:/app"
         container_name: vue
-        command: "yarn serve"
         ports:
             - "8080:8080"
-        volumes:
-            - "./vue:/usr/src/app"
-        working_dir: /usr/src/app
+        command:
+            - "yarn"
+            - "serve"
         stdin_open: true
         tty: true
         # environment:

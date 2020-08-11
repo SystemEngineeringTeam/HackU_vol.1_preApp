@@ -12,5 +12,5 @@ RUN go get -u github.com/go-sql-driver/mysql\
     ln -sf  /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 ADD ./app /app
-ADD ./gopath/ $GOPATH
+
 CMD ["go","run","main.go"]

@@ -22,23 +22,24 @@ export default {
     sample: [
       {
         id: 0,
-        name: "string",
-        deadline: "string",
-        users: ["string"],
+        title: "醤油を買う",
+        deadline: "2020-08-24 09:00",
+        users: [0, 1],
       },
       {
         id: 1,
-        name: "string",
-        deadline: "string",
-        users: ["string"],
+        title: "ペットの散歩",
+        deadline: "2020-08-24 15:00",
+        users: [2, 3],
       },
       {
         id: 2,
-        name: "string",
-        deadline: "string",
-        users: ["string"],
+        title: "スカイダイビング",
+        deadline: "2020-08-11 15:00",
+        users: [1],
       },
     ],
+    users: [{ id: 0, name: "けんしん" }, { id: 1, name: "福田"}, { id: 2, name:"あいはた"}, { id: 3, name:"とやま"}],
   }),
 };
 </script>

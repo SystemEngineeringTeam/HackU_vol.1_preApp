@@ -11,10 +11,9 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
 		apifuncs.Test(w,r)
-				
+
 	  fmt.Fprintln(w, "Hello World")	  	  
 	})
 
 	http.ListenAndServe(":8080", nil)	
   }
-

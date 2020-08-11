@@ -20,9 +20,14 @@ type InputJsonSchema struct{
 func Test(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodGet {
+
+		Jsontype:=InputJsonSchema{"in","Name","desciption",true,"responses"}
+
+		fmt.Fprintln(w,Jsontype)
 		
 		fmt.Fprintln(w, "Get Method")
-	
+		
+			
 	  } else if r.Method== http.MethodPost{
 		fmt.Fprintln(w, "Post Method")
 
@@ -41,7 +46,7 @@ func Test(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		fmt.Fprintf(w,"jsonで受け取りました")
+		fmt.Fprintf(w,"jsonを受け取りました")
 /* 
 		fmt.Fprintf(w,data.In)
 		fmt.Fprintf(w,data.Name)

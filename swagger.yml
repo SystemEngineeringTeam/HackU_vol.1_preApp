@@ -1,0 +1,152 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "HackU-preHackathon"
+host: "localhost:8080"
+tags:
+  - name: "tasks"
+    description: "タスク関連API"
+  - name: "users"
+    description: "ユーザー関連API"
+schemes:
+  - "http"
+paths:
+  /tasks:
+    get:
+      tags:
+        - "tasks"
+      summary: "タスク一覧API"
+      # description: "ユーザ情報を作成します。\n
+      # ユーザの名前情報をリクエストで受け取り、ユーザIDと認証用のトークンを生成しデータベースへ保存します。"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          "description": "A successful response."
+          "schema":
+            "$ref": "#/definitions/TasksGetResponse"
+    post:
+      tags:
+        - "tasks"
+      summary: "タスク追加API"
+      # description: "ユーザ情報を取得します。\n
+      # ユーザの認証と特定の処理はリクエストヘッダのx-tokenを読み取ってデータベースに照会をします。"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Request Body"
+          required: true
+          schema:
+            $ref: "#/definitions/TaskCreateRequest"
+      responses:
+        200:
+          "description": "A successful response."
+          "schema":
+            "$ref": "#/definitions/TaskCreateResponse"
+  /tasks/{taskId}:
+    put:
+      tags:
+        - "tasks"
+      summary: "タスク更新API"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "taskId"
+          in: "path"
+          description: "タスクのID"
+          required: true
+          type: "integer"
+          format: "int64"
+        - in: "body"
+          name: "body"
+          description: "Request Body"
+          required: true
+          schema:
+            $ref: "#/definitions/TaskCreateRequest"
+      responses:
+        200:
+          "description": "A successful response."
+    delete:
+      tags:
+        - "tasks"
+      summary: "タスク削除API"
+      parameters:
+        - name: "taskId"
+          in: "path"
+          description: "タスクのID"
+          required: true
+          type: "integer"
+          format: "int64"
+      # description: "ユーザ情報の更新をします。\n
+      # 初期実装では名前の更新を行います。"
+      responses:
+        200:
+          "description": "A successful response."
+
+  /users:
+    get:
+      tags:
+        - "users"
+      summary: "ユーザー一覧取得API"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          "description": "A successful response."
+          "schema":
+            "$ref": "#/definitions/UsersGetResponse"
+            
+  
+
+definitions:
+  TasksGetResponse:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        name:
+          type: "string"
+        deadline:
+          type: "string"
+        users:
+          type: "array"
+          items:
+            type: "string"
+  TaskCreateRequest:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      deadline:
+        type: "string"
+      users:
+        type: "array"
+        items:
+          type: "integer"
+  TaskCreateResponse:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+  UsersGetResponse:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        name:
+          type: "string"
+  

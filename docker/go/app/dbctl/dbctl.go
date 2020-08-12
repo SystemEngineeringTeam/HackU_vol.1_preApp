@@ -2,6 +2,7 @@ package dbctl
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"runtime"
 )
@@ -44,9 +45,6 @@ func init() {
 // CallTasks はデータベースからタスク一覧を取り出す関数
 func CallTasks() ([]Task, error) {
 	tasks := make([]Task, 0)
-	id := 0
-	title := ""
-	deadline := ""
 
 	rows, err := db.Query("select id,title,deadline from tasks")
 	if err != nil {
@@ -58,6 +56,10 @@ func CallTasks() ([]Task, error) {
 	defer rows.Close()
 
 	for rows.Next() {
+		id := 0
+		title := ""
+		deadline := ""
+
 		rows.Scan(&id, &title, &deadline)
 		users, err := callUsersFromTaskID(id)
 		if err != nil {
@@ -115,12 +117,23 @@ func callUserNameFromUserID(userID int) (string, error) {
 
 // RegisterNewTask はデータベースにタスクを追加する関数です
 func RegisterNewTask(task Task) (int, error) {
-	_, err := db.Query("insert into tasks(title,deadline) values (?,?)", task.Title, task.Deadline)
-	if err != nil {
-		pc, file, line, _ := runtime.Caller(0)
-		f := runtime.FuncForPC(pc)
-		log.Printf(errFormat, err, f.Name(), file, line)
-		return -1, err
+	fmt.Println(task.Deadline)
+	if task.Deadline == "" {
+		_, err := db.Query("insert into tasks(title,deadline) values (?,null)", task.Title)
+		if err != nil {
+			pc, file, line, _ := runtime.Caller(0)
+			f := runtime.FuncForPC(pc)
+			log.Printf(errFormat, err, f.Name(), file, line)
+			return -1, err
+		}
+	} else {
+		_, err := db.Query("insert into tasks(title,deadline) values (?,?)", task.Title, task.Deadline)
+		if err != nil {
+			pc, file, line, _ := runtime.Caller(0)
+			f := runtime.FuncForPC(pc)
+			log.Printf(errFormat, err, f.Name(), file, line)
+			return -1, err
+		}
 	}
 
 	rows, err := db.Query("select id from tasks where title=?", task.Title)

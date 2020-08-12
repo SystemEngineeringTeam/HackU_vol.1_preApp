@@ -195,7 +195,7 @@ func UsersResponse(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			log.Fatal(err)
 		}
-		w.WriteHeader(http.StatusOK)
+
 		jsonstring := string(jsonBytes)
 
 		// httpステータスコードを返す<-New

@@ -7,7 +7,7 @@
       {{ task.deadline }}
     </v-card-subtitle>
     <v-card-text>
-      <span v-for="(user, i) in users" :key="i">
+      <span v-for="(user, i) in task.users" :key="i">
         {{ user }}
       </span>
     </v-card-text>
@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  props: ["task", "users"],
+  props: ["task"],
 
   data: () => ({}),
 };

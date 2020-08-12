@@ -11,22 +11,24 @@ export default new Vuex.Store({
         id: 0,
         title: "醤油をかける",
         deadline: "2020-08-24 09:00",
-        users_id: [0, 1],
+        users: ["秦", "福田"],
       },
       {
         id: 1,
         title: "ペットの散歩",
         deadline: "2020-08-24 15:00",
-        users_id: [2, 3, 1],
+        users: ["福田", "相畑", "外山"],
       },
       {
         id: 2,
         title: "スカイダイビング",
         deadline: "2020-08-11 15:00",
-        users_id: [1, 2],
+        users: ["相畑"],
       },
     ],
-    users: [],
+    users: [
+
+    ],
     post: {
       title: "",
       deadlineDate: "",

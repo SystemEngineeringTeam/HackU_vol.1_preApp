@@ -1,7 +1,5 @@
 package apifuncs
 
-//
-
 import (
 	"encoding/json"
 	"fmt"

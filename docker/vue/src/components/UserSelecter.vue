@@ -25,7 +25,6 @@ export default {
       },
       set(value) {
         this.$store.commit("setPostUser", value);
-        console.log("ちんちん")
       }
     }
   }

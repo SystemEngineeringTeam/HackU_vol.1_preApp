@@ -37,10 +37,10 @@ export default {
         .then((response) => console.log(response));
     },
     allReset() { 
-      this.$store.state.post.title = "";
-      this.$store.state.post.deadlineDate = null;
-      this.$store.state.post.deadlineTime = null;
-      this.$store.state.post.users = [];
+      this.$store.commit("setPostTitle","");
+      this.$store.commit("setPostDeadlineDate",null);
+      this.$store.commit("setPostDeadlineTime",null);
+      this.$store.commit("setPostUser",[]);
     }
   },
   computed: {

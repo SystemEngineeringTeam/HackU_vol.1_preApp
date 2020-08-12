@@ -6,7 +6,7 @@
       <UserSelecter :state="this.$store.state.post" :stateStr="stateStr"/>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary" @click="post">
+      <v-btn color="primary" @click="postTask">
         作成
       </v-btn>
       <v-btn @click="allReset">
@@ -31,11 +31,8 @@ export default {
     stateStr: "Post"
   }),
   methods: {
-    test() {
-      console.log(this.title);
-      this.axios
-        .get("https://api.coindesk.com/v1/bpi/currentprice.json")
-        .then((response) => console.log(response));
+    postTask() {
+      this.$store.dispatch("postTask")
     },
     allReset() { 
       this.$store.commit("setPostTitle","");

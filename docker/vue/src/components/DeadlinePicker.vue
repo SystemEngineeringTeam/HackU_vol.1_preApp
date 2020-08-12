@@ -17,6 +17,7 @@
             readonly
             v-bind="attrs"
             v-on="on"
+            @click="dateInitial"
           ></v-text-field>
         </template>
         <v-date-picker
@@ -69,7 +70,8 @@ export default {
 
   data() {
     return {
-      date: new Date().toISOString().substr(0, 10),
+      //date: new Date().toISOString().substr(0, 10),
+      date: null,
       datePick: false,
       time: null,
       timePick: false,
@@ -79,6 +81,12 @@ export default {
     resetDeadline: function(){
       this.date = null;
       this.time = null;
+    },
+
+    dateInitial: function(){
+      if(this.date === null){
+        this.date = new Date().toISOString().substr(0, 10);
+      }
     }
   },
 };

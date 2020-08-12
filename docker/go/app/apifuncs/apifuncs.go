@@ -84,6 +84,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		//処理が終わったらjsonを構造体にする
 		if err := json.Unmarshal(jsonBytes, &data); err != nil {
 
+			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Println("JSON Unmarshal error:", err)
 			return
 		}
@@ -92,7 +93,9 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		//データベースに受けっとた情報を登録
 		n, err := dbctl.RegisterNewTask(data)
 		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Println(err)
+
 		}
 		w.WriteHeader(http.StatusOK)
 

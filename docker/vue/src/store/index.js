@@ -21,7 +21,7 @@ export default new Vuex.Store({
       deadlineTime: null,
       users: [],
     },
-    formFlag: false
+    formFlag: false,
   },
   mutations: {
     setTasks(state, tasks) {
@@ -30,9 +30,9 @@ export default new Vuex.Store({
     removeTask(state, index) {
       state.tasks.splice(index, 1);
     },
-    updateTask(state, task){
-      let index = state.tasks.findIndex(element => element.id === task.id);
-      state.tasks.splice(index,1,task);
+    updateTask(state, task) {
+      let index = state.tasks.findIndex((element) => element.id === task.id);
+      state.tasks.splice(index, 1, task);
     },
     setUsers(state, users) {
       state.users = users;
@@ -64,7 +64,7 @@ export default new Vuex.Store({
     setUpdateUser(state, users) {
       state.update.users = users;
     },
-    setFormFlag(state, formFlag){
+    setFormFlag(state, formFlag) {
       state.formFlag = formFlag;
     },
   },
@@ -78,6 +78,12 @@ export default new Vuex.Store({
       await axios
         .get(process.env.VUE_APP_URL_USERS)
         .then((res) => context.commit("setUsers", res.data));
+    },
+    allReset(context) { 
+      context.commit("setPostTitle","");
+      context.commit("setPostDeadlineDate",null);
+      context.commit("setPostDeadlineTime",null);
+      context.commit("setPostUser",[]);
     },
     async postTask(context) {
       const post = context.state.post;
@@ -101,9 +107,24 @@ export default new Vuex.Store({
         users: context.state.post.users,
       };
       console.log(post_json);
-      await axios
-        .post(process.env.VUE_APP_URL_TASKS, post_json)
-        .then((res) => console.log(res));
+      await axios.post(process.env.VUE_APP_URL_TASKS, post_json).then((res) => {
+        if (res.status == 200) {
+          let deadline =
+            context.state.post.deadlineDate +
+            " " +
+            context.state.post.deadlineTime;
+          let task = {
+            id: res.data.id, //ここのIDはバックエンドから取得する
+            title: context.state.post.title,
+            deadline: deadline,
+            users: context.state.post.users,
+          };
+          let tasks = context.state.tasks;
+          tasks.push(task);
+          context.commit("setTasks", tasks);
+          context.dispatch("allReset")
+        }
+      });
     },
     async deleteTask(context, id) {
       await axios.delete(process.env.VUE_APP_URL_TASKS + id).then((res) => {

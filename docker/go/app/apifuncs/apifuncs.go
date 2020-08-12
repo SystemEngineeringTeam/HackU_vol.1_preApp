@@ -50,7 +50,6 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			log.Fatal(err)
 		}
-		w.WriteHeader(http.StatusOK)
 
 		// 受け取った配列をJSONに変換
 		jsonBytes, err := json.Marshal(tasks)
@@ -76,7 +75,6 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("io error")
 			return
 		}
-		w.WriteHeader(http.StatusOK)
 
 		//構造体の初期化
 		data := dbctl.Task{}
@@ -88,7 +86,6 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("JSON Unmarshal error:", err)
 			return
 		}
-		w.WriteHeader(http.StatusOK)
 
 		//データベースに受けっとた情報を登録
 		n, err := dbctl.RegisterNewTask(data)
@@ -125,7 +122,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
-		w.WriteHeader(http.StatusOK)
+
 		task.ID = pathNumber
 
 		//jsonを読み込み
@@ -136,14 +133,12 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("io error")
 			return
 		}
-		w.WriteHeader(http.StatusOK)
 
 		if err := json.Unmarshal(jsonBytes, &task); err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Println("JSON UNmarashal error", err)
 			return
 		}
-		w.WriteHeader(http.StatusOK)
 
 		if err := dbctl.PutTasks(task); err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
@@ -165,7 +160,6 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		w.WriteHeader(http.StatusOK)
 
 		if err := dbctl.DeleteTask(idNum); err != nil {
 
@@ -190,7 +184,6 @@ func UsersResponse(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			log.Fatal(err)
 		}
-		w.WriteHeader(http.StatusOK)
 
 		//jsonに変換//byte？
 		jsonBytes, err := json.Marshal(users)

@@ -29,8 +29,8 @@ export default new Vuex.Store({
     users: [],
     post: {
       title: "",
-      deadlineDate: "",
-      deadlineTime: "",
+      deadlineDate: null,
+      deadlineTime: null,
       users: [],
     },
   },

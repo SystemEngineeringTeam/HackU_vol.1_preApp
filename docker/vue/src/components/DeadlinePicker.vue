@@ -64,13 +64,10 @@
 
 <script>
 export default {
-  //props: ['time','date'],
 
   data() {
     return {
-      //date: new Date().toISOString().substr(0, 10),
       datePick: false,
-      time: null,
       timePick: false,
     };
   },
@@ -83,16 +80,24 @@ export default {
         this.$store.commit("setPostDeadlineDate", value);
       },
     },
+    time: {
+      get(){
+        return this.$store.state.post.deadlineTime
+      },
+      set(value){
+        this.$store.commit("setPostDeadlineTime", value);
+      }
+    }
   },
   methods: {
     resetDeadline: function() {
-      this.date = null;
-      this.time = null;
+      this.$store.commit("setPostDeadlineDate", null);
+      this.$store.commit("setPostDeadlineTime", null);
     },
 
     dateInitial: function() {
-      if (this.date === null) {
-        this.date = new Date().toISOString().substr(0, 10);
+      if (this.$store.state.post.deadlineDate === null) {
+        this.$store.commit("setPostDeadlineDate",new Date().toISOString().substr(0, 10));
       }
     },
   },

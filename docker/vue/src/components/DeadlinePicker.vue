@@ -57,7 +57,7 @@
       </v-menu>
     </v-col>
     <v-col cols="5">
-      <v-btn @click="resetDeadline">リセット</v-btn>
+      <v-btn @click="resetDeadline">日付リセット</v-btn>
     </v-col>
   </v-row>
 </template>

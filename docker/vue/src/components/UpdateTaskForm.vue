@@ -6,7 +6,7 @@
       <UserSelecter :state="this.$store.state.update" :stateStr="stateStr" />
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary" @click="test">更新</v-btn>
+      <v-btn color="primary" @click="doUpdate">更新</v-btn>
       <v-btn @click="allReset">リセット</v-btn>
       <v-btn @click="cancel">キャンセル</v-btn>
     </v-card-actions>
@@ -28,12 +28,12 @@ export default {
     stateStr: "Update"
   }),
   methods: {
-    test() {
-      console.log(this.title);
-      this.axios
-        .get("https://api.coindesk.com/v1/bpi/currentprice.json")
-        .then(response => console.log(response));
-    },
+    // test() {
+    //   console.log(this.title);
+    //   this.axios
+    //     .get("https://api.coindesk.com/v1/bpi/currentprice.json")
+    //     .then(response => console.log(response));
+    // },
     allReset() {
       this.$store.commit("setUpdateTitle", "");
       this.$store.commit("setUpdateDeadlineDate", null);
@@ -42,7 +42,20 @@ export default {
     },
     cancel() {
       this.allReset();
-      this.$store.commit("setFormFlag",false);
+      this.$store.commit("setFormFlag", false);
+    },
+    doUpdate() {
+      //このメソッドが実行された時点でAPIを用いた通信をしなければならない
+      let deadline = this.$store.state.update.deadlineDate + " " + this.$store.state.update.deadlineTime;
+      let task = {
+        id: this.$store.state.update.id,
+        title: this.$store.state.update.title,
+        deadline: deadline,
+        users: this.$store.state.update.users
+      };
+      this.$store.commit("updateTask",task);
+      this.allReset();
+      this.$store.commit("setFormFlag",true);
     }
   },
   computed: {

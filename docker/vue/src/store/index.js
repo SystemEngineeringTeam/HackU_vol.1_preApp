@@ -49,6 +49,10 @@ export default new Vuex.Store({
     removeTask(state, index){
       state.tasks.splice(index,1);
     },
+    updateTask(state, task){
+      let index = state.tasks.findIndex(element => element.id === task.id);
+      state.tasks.splice(index,1,task);
+    },
     setUsers(state, users) {
       state.users = users;
     },

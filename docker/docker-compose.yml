@@ -25,20 +25,20 @@ services:
             - mysql
         environment:
             WAIT_HOSTS: mysql
-    vue:
-        build: ./vue
-        volumes:
-            - "./vue:/app"
-        container_name: vue
-        ports:
-            - "8080:8080"
-        command:
-            - "yarn"
-            - "serve"
-        stdin_open: true
-        tty: true
-        # environment:
-        # WAIT_HOSTS: go_app
+    # vue:
+    #     build: ./vue
+    #     volumes:
+    #         - "./vue:/app"
+    #     container_name: vue
+    #     ports:
+    #         - "8080:8080"
+    #     command:
+    #         - "yarn"
+    #         - "serve"
+    #     stdin_open: true
+    #     tty: true
+    #     # environment:
+    #     # WAIT_HOSTS: go_app
 
 networks:
     pre_app_network:

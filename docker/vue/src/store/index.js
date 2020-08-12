@@ -27,7 +27,10 @@ export default new Vuex.Store({
       },
     ],
     users: [
-
+      "秦",
+      "福田",
+      "外山",
+      "相畑"
     ],
     post: {
       title: "",
@@ -52,11 +55,8 @@ export default new Vuex.Store({
     setPostDeadlineTime(state, time) {
       state.post.deadlineTime = time;
     },
-    pushPostUsers(state, user) {
-      state.post.users.push(user);
-    },
-    splicePostUser(state, index) {
-      state.post.users.slice(index, 1);
+    setPostUser(state, users){
+      state.post.users = users;
     },
   },
   actions: {

@@ -15,23 +15,38 @@ func DBTest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", r.RemoteAddr)              // Allow remote access.
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
 
+	// if r.Method == http.MethodGet {
+	// 	// CallTasks returns []dbctl.Task
+	// 	tasks, err := dbctl.CallTasks()
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 		w.WriteHeader(http.StatusServiceUnavailable)
+	// 	}
+	// 	// Array to JSON.
+	// 	b, err := json.Marshal(tasks)
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
+	// 	// []byte to string.
+	// 	taskString := string(b)
+
+	// 	w.WriteHeader(200)
+	// 	fmt.Fprintln(w, taskString)
+	// 	fmt.Println(taskString)
+	// }
+
 	if r.Method == http.MethodGet {
-		// CallTasks returns []dbctl.Task.
-		tasks, err := dbctl.CallTasks()
+		users, err := dbctl.CallUsers()
 		if err != nil {
-			log.Fatal(err)
 			w.WriteHeader(http.StatusServiceUnavailable)
 		}
-		// Array to JSON.
-		b, err := json.Marshal(tasks)
+		b, err := json.Marshal(users)
 		if err != nil {
 			log.Fatal(err)
 		}
-		// []byte to string.
-		taskString := string(b)
-
-		w.WriteHeader(200)
-		fmt.Fprintln(w, taskString)
-		fmt.Println(taskString)
+		userString := string(b)
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintln(w, userString)
+		fmt.Println(userString)
 	}
 }

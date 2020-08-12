@@ -105,6 +105,8 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, newTaskID)
 
 		/*
+
+
 			fmt.Fprintf(w,data.In)
 			fmt.Fprintf(w,data.Name)
 			fmt.Fprintf(w,data.Description)
@@ -148,9 +150,10 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 
 		log.Println("Put Method")
-	} else {
+	} else if r.Method == http.MethodDelete {
 		//tasks/1 , ""←空文字
 		idString := strings.ReplaceAll(r.URL.Path, "/tasks/", "")
+		// <-Method:DELETE idString="",idString="1"
 
 		idNum, err := strconv.Atoi(idString)
 		//文字列を数字に変換
@@ -175,8 +178,8 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 // UsersResponse は/usersに関する処理を行う
 func UsersResponse(w http.ResponseWriter, r *http.Request) {
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
+	w.Header().Set("Access-Control-Allow-Origin", "*")    // Allow any access.
+	w.Header().Set("Access-Control-Allow-Methods", "GET") // Allowed methods.
 
 	if r.Method == http.MethodGet {
 		users, err := dbctl.CallUsers()

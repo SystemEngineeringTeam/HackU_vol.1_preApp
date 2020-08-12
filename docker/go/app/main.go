@@ -8,6 +8,7 @@ import (
 
 func main() {
 	http.HandleFunc("/", apifuncs.Test)
+	http.HandleFunc("/test", apifuncs.DBTest)
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":80", nil)
 }

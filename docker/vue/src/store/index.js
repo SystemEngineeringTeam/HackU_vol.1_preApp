@@ -72,7 +72,13 @@ export default new Vuex.Store({
     async setTasks(context) {
       await axios
         .get(process.env.VUE_APP_URL_TASKS)
-        .then((res) => context.commit("setTasks", res.data));
+        .then((res) => {
+          res.data.forEach((task, index, array) => {
+            array[index].deadline = task.deadline.substr(0, 16);
+            console.log(task.deadline.substr(0, 16));
+          })
+          context.commit("setTasks", res.data);
+        })
     },
     async setUsers(context) {
       await axios
@@ -123,6 +129,52 @@ export default new Vuex.Store({
           tasks.push(task);
           context.commit("setTasks", tasks);
           context.dispatch("postAllReset")
+        }
+      });
+    },
+    updateAllReset(context){
+      context.commit("setUpdateTitle","");
+      context.commit("setUpdateDeadlineDate",null);
+      context.commit("setUpdateDeadlineTime",null);
+      context.commit("setUpdateUser",[]);
+    },
+    async updateTask(context){
+      const update = context.state.update;
+      let deadline;
+      if (update.deadlineDate && update.deadlineTime) {
+        deadline = update.deadlineDate + " " + update.deadlineTime + ":00";
+      } else if (update.deadlineDate && !update.deadlineTime) {
+        deadline = update.deadlineDate + " " + "23:59:59";
+      } else if (!update.deadlineDate && update.deadlineTime) {
+        deadline =
+          new Date().toISOString().substr(0, 10) +
+          " " +
+          update.deadlineTime +
+          ":00";
+      } else {
+        deadline = null;
+      }
+      const update_json = {
+        title: context.state.update.title,
+        deadline: deadline,
+        users: context.state.update.users,
+      };
+      console.log(update_json);
+      await axios.put(process.env.VUE_APP_URL_TASKS + context.state.update.id, update_json).then((res) => {
+        if (res.status == 200) {
+          let deadline =
+            context.state.update.deadlineDate +
+            " " +
+            context.state.update.deadlineTime;
+          let task = {
+            id: res.data.id, //ここのIDはバックエンドから取得する
+            title: context.state.update.title,
+            deadline: deadline,
+            users: context.state.update.users,
+          };
+          context.commit("updateTask", task);
+          context.dispatch("updateAllReset")
+          context.state.formFlag = false;
         }
       });
     },

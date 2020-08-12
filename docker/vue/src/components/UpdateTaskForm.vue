@@ -35,27 +35,14 @@ export default {
     //     .then(response => console.log(response));
     // },
     allReset() {
-      this.$store.commit("setUpdateTitle", "");
-      this.$store.commit("setUpdateDeadlineDate", null);
-      this.$store.commit("setUpdateDeadlineTime", null);
-      this.$store.commit("setUpdateUser", []);
+        this.$store.dispatch("updateAllReset");
     },
     cancel() {
-      this.allReset();
+      this.$store.dispatch("updateAllReset");
       this.$store.commit("setFormFlag", false);
     },
     doUpdate() {
-      //このメソッドが実行された時点でAPIを用いた通信をしなければならない
-      let deadline = this.$store.state.update.deadlineDate + " " + this.$store.state.update.deadlineTime;
-      let task = {
-        id: this.$store.state.update.id,
-        title: this.$store.state.update.title,
-        deadline: deadline,
-        users: this.$store.state.update.users
-      };
-      this.$store.commit("updateTask",task);
-      this.allReset();
-      this.$store.commit("setFormFlag",true);
+      this.$store.dispatch("updateTask");
     }
   },
   computed: {

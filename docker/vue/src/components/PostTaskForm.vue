@@ -32,28 +32,10 @@ export default {
   }),
   methods: {
     postTask() {
-      this.$store.dispatch("postTask")
+      this.$store.dispatch("postTask");
     },
-    allReset() { 
-      this.$store.commit("setPostTitle","");
-      this.$store.commit("setPostDeadlineDate",null);
-      this.$store.commit("setPostDeadlineTime",null);
-      this.$store.commit("setPostUser",[]);
-    },
-    post() {
-      //このメソッドが実行された時点でAPIを用いた通信をしなければならない
-      let deadline = this.$store.state.post.deadlineDate + " " + this.$store.state.post.deadlineTime
-      let task = {
-        id: 12345,//ここのIDは後ほどちゃんと実装する
-        title: this.$store.state.post.title,
-        deadline: deadline,
-        users: this.$store.state.post.users
-      };
-      let tasks = this.$store.state.tasks;
-      tasks.push(task);
-      this.$store.commit("setTasks",tasks);
-      this.allReset();
-      // console.log(this.$store.state.tasks);
+    allReset(){
+      this.$store.dispatch("postAllReset");
     }
   },
   computed: {

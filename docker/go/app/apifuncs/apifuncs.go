@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"set1.ie.aitech.ac.jp/HackU_vol_1/dbctl"
 )
@@ -49,6 +50,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			log.Fatal(err)
 		}
+		w.WriteHeader(http.StatusOK)
 
 		// 受け取った配列をJSONに変換
 		jsonBytes, err := json.Marshal(tasks)
@@ -70,24 +72,32 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		//jsonを読み込む
 		jsonBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Println("io error")
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 
 		//構造体の初期化
 		data := dbctl.Task{}
 
 		//処理が終わったらjsonを構造体にする
 		if err := json.Unmarshal(jsonBytes, &data); err != nil {
+
+			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Println("JSON Unmarshal error:", err)
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 
 		//データベースに受けっとた情報を登録
 		n, err := dbctl.RegisterNewTask(data)
 		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Println(err)
+
 		}
+		w.WriteHeader(http.StatusOK)
 
 		// IDをjsonに変換// "{\"name\":" + strconv.Itoa(n) + "}"がjsonの形式
 		newTaskID := "{\"id\":" + strconv.Itoa(n) + "}"
@@ -105,15 +115,71 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w,data.Responses)	 */
 
 	} else if r.Method == http.MethodPut {
-		fmt.Fprintln(w, "Put Method")
-	} else {
-		fmt.Fprintln(w, "delete Method")
-	}
+		//構造体の初期化
+		task := dbctl.Task{}
+		pathString := strings.ReplaceAll(r.URL.Path, "/tasks/", "")
+		pathNumber, err := strconv.Atoi(pathString)
 
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		task.ID = pathNumber
+
+		//jsonを読み込み
+		jsonBytes, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			//io(input,output)
+			fmt.Println("io error")
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+
+		if err := json.Unmarshal(jsonBytes, &task); err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			fmt.Println("JSON UNmarshal error", err)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+
+		if err := dbctl.PutTasks(task); err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			fmt.Println(err)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+
+		log.Println("Put Method")
+	} else {
+		//tasks/1 , ""←空文字
+		idString := strings.ReplaceAll(r.URL.Path, "/tasks/", "")
+
+		idNum, err := strconv.Atoi(idString)
+		//文字列を数字に変換
+		if err != nil {
+			//エラー処理
+			w.WriteHeader(http.StatusServiceUnavailable)
+			fmt.Println(err)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+
+		if err := dbctl.DeleteTask(idNum); err != nil {
+
+			w.WriteHeader(http.StatusServiceUnavailable)
+			//エラー処理
+			fmt.Println(err)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+	}
 }
 
-//UsersRespnse は/usersに関する処理を行う
-func UsersRespnse(w http.ResponseWriter, r *http.Request) {
+// UsersResponse は/usersに関する処理を行う
+func UsersResponse(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
@@ -124,6 +190,7 @@ func UsersRespnse(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			log.Fatal(err)
 		}
+		w.WriteHeader(http.StatusOK)
 
 		//jsonに変換//byte？
 		jsonBytes, err := json.Marshal(users)
@@ -131,6 +198,7 @@ func UsersRespnse(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			log.Fatal(err)
 		}
+		w.WriteHeader(http.StatusOK)
 		jsonstring := string(jsonBytes)
 
 		// httpステータスコードを返す<-New

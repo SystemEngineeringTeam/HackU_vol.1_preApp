@@ -34,7 +34,7 @@ export default {
     ],
   }),
 
-  methods: {
+  computed: {
     findUser: function(taskUser) {
       let re = [];
       for (var i = 0; i < taskUser.length; i++) {

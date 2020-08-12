@@ -9,6 +9,9 @@
       <v-btn color="primary" @click="test">
         作成
       </v-btn>
+      <v-btn @click="allReset">
+        リセット
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -23,7 +26,6 @@ export default {
     UserSelecter
   },
   data: () => ({
-    title: "こんにちは",
     picker: "",
     datePick: false,
   }),
@@ -34,6 +36,22 @@ export default {
         .get("https://api.coindesk.com/v1/bpi/currentprice.json")
         .then((response) => console.log(response));
     },
+    allReset() { 
+      this.$store.state.post.title = "";
+      this.$store.state.post.deadlineDate = null;
+      this.$store.state.post.deadlineTime = null;
+      this.$store.state.post.users = [];
+    }
   },
+  computed: {
+    title: {
+      get() {
+        return this.$store.state.post.title;
+      },
+      set(value) {
+        this.$store.commit("setPostTitle", value);
+      },
+    }
+  }
 };
 </script>

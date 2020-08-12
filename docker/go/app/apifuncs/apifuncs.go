@@ -20,9 +20,10 @@ import (
 
 //TaskResponse は/tasksに対する処理をする
 func TaskResponse(w http.ResponseWriter, r *http.Request) {
-	//セキリティ設定
+	//セキュリティ設定
 	w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
+	w.Header().Set("Access-Control-Allow-Headers", "*")
 
 	if r.Method == http.MethodGet {
 
@@ -179,7 +180,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 func UsersResponse(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")    // Allow any access.
-	w.Header().Set("Access-Control-Allow-Methods", "GET") // Allowed methods.
+	w.Header().Add("Access-Control-Allow-Methods", "GET") // Allowed methods.
 
 	if r.Method == http.MethodGet {
 		users, err := dbctl.CallUsers()

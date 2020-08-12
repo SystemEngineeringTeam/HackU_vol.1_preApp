@@ -29,19 +29,19 @@ export default {
         id: 0,
         title: "醤油を買う",
         deadline: "2020-08-24 09:00",
-        users: [0, 1],
+        users_id: [0, 1],
       },
       {
         id: 1,
         title: "ペットの散歩",
         deadline: "2020-08-24 15:00",
-        users: [2, 3, 1],
+        users_id: [2, 3, 1],
       },
       {
         id: 2,
         title: "スカイダイビング",
         deadline: "2020-08-11 15:00",
-        users: [1, 2],
+        users_id: [1, 2],
       },
     ],
     users: [

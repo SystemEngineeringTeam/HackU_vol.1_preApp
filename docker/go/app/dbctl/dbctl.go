@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"log"
 	"runtime"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 // Tasks は/taskでメソッドがgetだったら返す
@@ -107,4 +105,81 @@ func callUserNameFromUserID(userID int) (string, error) {
 
 	}
 	return name, nil
+}
+
+// RegisterNewTask はデータベースにタスクを追加する関数です
+func RegisterNewTask(task Tasks) (int, error) {
+	_, err := db.Query("insert into tasks(title,deadline) values (?,?)", task.Title, task.Deadline)
+	if err != nil {
+		log.Fatal(err)
+		return -1, err
+	}
+
+	rows, err := db.Query("select id from tasks where title=?", task.Title)
+	if err != nil {
+		log.Fatal(err)
+		return -1, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		rows.Scan(&task.ID)
+	}
+
+	userIDs := make([]int, 0)
+
+	for _, name := range task.Users {
+		id, err := callUserIDFromName(name)
+		if err != nil {
+			return -1, err
+		}
+
+		userIDs = append(userIDs, id)
+	}
+
+	for _, u := range userIDs {
+		err := linkTaskIDAndUserID(task.ID, u)
+		if err != nil {
+			return -1, err
+		}
+	}
+
+	return task.ID, nil
+}
+
+func callUserIDFromName(name string) (int, error) {
+	rows, err := db.Query("select id from users where name=?", name)
+	if err != nil {
+		return -1, err
+	}
+	defer rows.Close()
+
+	id := 0
+	for rows.Next() {
+		rows.Scan(&id)
+	}
+
+	return id, nil
+}
+
+func linkTaskIDAndUserID(taskID, userID int) error {
+	_, err := db.Query("insert into links_table(task_id,user_id)", taskID, userID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// DeleteTask はデータベースからタスクを削除する関数です
+func DeleteTask(id int) error {
+	_, err := db.Query("delete from tasks where id = ?", id)
+	if err != nil {
+		return err
+	}
+	_, err = db.Query("delete from links_table where task_id = ?", id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

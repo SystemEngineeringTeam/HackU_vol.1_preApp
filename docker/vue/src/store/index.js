@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from 'axios';
+import axios from "axios";
 
 Vue.use(Vuex);
 
@@ -26,12 +26,7 @@ export default new Vuex.Store({
         users: ["相畑"],
       },
     ],
-    users: [
-      "秦",
-      "福田",
-      "外山",
-      "相畑"
-    ],
+    users: ["秦", "福田", "外山", "相畑"],
     post: {
       title: "",
       deadlineDate: null,
@@ -55,7 +50,7 @@ export default new Vuex.Store({
     setPostDeadlineTime(state, time) {
       state.post.deadlineTime = time;
     },
-    setPostUser(state, users){
+    setPostUser(state, users) {
       state.post.users = users;
     },
   },
@@ -63,12 +58,12 @@ export default new Vuex.Store({
     async setTasks(context) {
       await axios
         .get(process.env.VUE_APP_URL_TASKS)
-        .then((res) => context.setTasks(res.data));
+        .then((res) => context.commit("setTasks", res.data));
     },
     async setUsers(context) {
       await axios
-        .get("http://localhost:3000")
-        .then((res) => context.setUsers(res.data));
+        .get(process.env.VUE_APP_URL_USERS)
+        .then((res) => context.commit("setUsers", res.data));
     },
   },
   modules: {},

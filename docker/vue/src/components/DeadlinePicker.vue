@@ -13,7 +13,6 @@
           <v-text-field
             v-model="date"
             label="Picker without buttons"
-            prepend-icon="event"
             readonly
             v-bind="attrs"
             v-on="on"
@@ -44,7 +43,6 @@
           <v-text-field
             v-model="time"
             label="Picker in menu"
-            prepend-icon="access_time"
             readonly
             v-bind="attrs"
             v-on="on"
@@ -71,23 +69,32 @@ export default {
   data() {
     return {
       //date: new Date().toISOString().substr(0, 10),
-      date: null,
       datePick: false,
       time: null,
       timePick: false,
     };
   },
+  computed: {
+    date: {
+      get() {
+        return this.$store.state.post.deadlineDate;
+      },
+      set(value) {
+        this.$store.commit("setPostDeadlineDate", value);
+      },
+    },
+  },
   methods: {
-    resetDeadline: function(){
+    resetDeadline: function() {
       this.date = null;
       this.time = null;
     },
 
-    dateInitial: function(){
-      if(this.date === null){
+    dateInitial: function() {
+      if (this.date === null) {
         this.date = new Date().toISOString().substr(0, 10);
       }
-    }
+    },
   },
 };
 </script>

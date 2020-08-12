@@ -4,7 +4,7 @@
       <v-col cols="12">
         <PostTaskForm />
       </v-col>
-      <v-col cols="12" v-for="(task, i) in sample" :key="i">
+      <v-col cols="12" v-for="(task, i) in this.$store.state.tasks" :key="i">
         <Task :task="task" :users="findUser(task.users_id)" />
       </v-col>
     </v-row>
@@ -25,24 +25,6 @@ export default {
 
   data: () => ({
     sample: [
-      {
-        id: 0,
-        title: "醤油を買う",
-        deadline: "2020-08-24 09:00",
-        users_id: [0, 1],
-      },
-      {
-        id: 1,
-        title: "ペットの散歩",
-        deadline: "2020-08-24 15:00",
-        users_id: [2, 3, 1],
-      },
-      {
-        id: 2,
-        title: "スカイダイビング",
-        deadline: "2020-08-11 15:00",
-        users_id: [1, 2],
-      },
     ],
     users: [
       { id: 0, name: "けんしん" },

@@ -86,12 +86,12 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		//データベースに受けっとた情報を登録
 		n, err := dbctl.RegisterNewTask(data)
 		if err != nil {
-			fmt.Println("Failed insert data")
-			return
+			fmt.Println(err)
 		}
 
 		// IDをjsonに変換// "{\"name\":" + string(n) + "}"がjsonの形式
 		newTaskID := "{\"id\":" + string(n) + "}"
+		//{"id":1234}
 
 		//構造体を返す
 		fmt.Fprintln(w, newTaskID)

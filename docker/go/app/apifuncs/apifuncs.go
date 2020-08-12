@@ -10,10 +10,11 @@ import (
 	"set1.ie.aitech.ac.jp/HackU_vol_1/dbctl"
 )
 
-// /tasksのPOSTメソッドに対するレスポンス用構造体
-type taskResponseMethodPOST struct {
-	ID int `json:"id"`
-}
+// // /tasksのPOSTメソッドに対するレスポンス用構造体
+// //内部のみで使う構造体の先頭は小文字
+// type taskResponseMethodPOST struct {
+// 	ID int `json:"id"`
+// }
 
 //TaskResponse は/tasksに対する処理をする
 func TaskResponse(w http.ResponseWriter, r *http.Request) {
@@ -66,27 +67,33 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == http.MethodPost {
 		log.Println("PostMethod")
 
+		//jsonを読み込む
 		jsonBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			fmt.Println("io error")
 			return
 		}
 
-		//構造体
+		//構造体の初期化
 		data := dbctl.Task{}
+
+		//処理が終わったらjsonを構造体にする
 		if err := json.Unmarshal(jsonBytes, &data); err != nil {
 			fmt.Println("JSON Unmarshal error:", err)
 			return
 		}
 
+		//データベースに受けっとた情報を登録
 		n, err := dbctl.RegisterNewTask(data)
 		if err != nil {
 			fmt.Println("Failed insert data")
 			return
 		}
 
-		newTaskID := taskResponseMethodPOST{n}
+		// IDをjsonに変換// "{\"name\":" + string(n) + "}"がjsonの形式
+		newTaskID := "{\"id\":" + string(n) + "}"
 
+		//構造体を返す
 		fmt.Fprintln(w, newTaskID)
 
 		/*

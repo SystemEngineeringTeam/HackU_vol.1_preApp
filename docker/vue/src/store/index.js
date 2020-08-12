@@ -65,6 +65,32 @@ export default new Vuex.Store({
         .get(process.env.VUE_APP_URL_USERS)
         .then((res) => context.commit("setUsers", res.data));
     },
+    async postTask(context) {
+      const post = context.state.post;
+      let deadline;
+      if (post.deadlineDate && post.deadlineTime) {
+        deadline = post.deadlineDate + " " + post.deadlineTime + ":00";
+      } else if (post.deadlineDate && !post.deadlineTime) {
+        deadline = post.deadlineDate + " " + "23:59:59";
+      } else if (!post.deadlineDate && post.deadlineTime) {
+        deadline =
+          new Date().toISOString().substr(0, 10) +
+          " " +
+          post.deadlineTime +
+          ":00";
+      } else {
+        deadline = null;
+      }
+      const post_json = {
+        title: context.state.post.title,
+        deadline: deadline,
+        users: context.state.post.users,
+      };
+      console.log(post_json);
+      await axios
+        .post(process.env.VUE_APP_URL_TASKS, post_json)
+        .then((res) => context.commit("setUsers", res.data));
+    },
   },
   modules: {},
 });

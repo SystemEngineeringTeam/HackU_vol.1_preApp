@@ -131,10 +131,10 @@ definitions:
         type: "string"
       deadline:
         type: "string"
-      users_id:
+      users:
         type: "array"
         items:
-          type: "integer"
+          type: "string"
   TaskCreateResponse:
     type: "object"
     properties:

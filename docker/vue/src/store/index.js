@@ -27,8 +27,12 @@ export default new Vuex.Store({
       },
     ],
     users: [
-
+      "秦",
+      "福田",
+      "外山",
+      "相畑"
     ],
+    userBool: [],
     post: {
       title: "",
       deadlineDate: null,
@@ -51,6 +55,9 @@ export default new Vuex.Store({
     },
     setPostDeadlineTime(state, time) {
       state.post.deadlineTime = time;
+    },
+    setUserBool(state, userBool){
+      state.post.userBool = userBool;
     },
     pushPostUsers(state, user) {
       state.post.users.push(user);

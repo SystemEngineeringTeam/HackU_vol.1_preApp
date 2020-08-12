@@ -3,6 +3,7 @@
     <v-card-text>
       <v-text-field v-model="title" label="title" required></v-text-field>
       <DeadlinePicker />
+      <UserSelecter />
     </v-card-text>
     <v-card-actions>
       <v-btn color="primary" @click="test">
@@ -14,10 +15,12 @@
 
 <script>
 import DeadlinePicker from "../components/DeadlinePicker";
+import UserSelecter from "../components/UserSelecter";
 
 export default {
   components: {
     DeadlinePicker,
+    UserSelecter
   },
   data: () => ({
     title: "こんにちは",

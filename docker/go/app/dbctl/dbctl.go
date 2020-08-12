@@ -8,8 +8,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// Tasks は/taskでメソッドがgetだったら返す
-type Tasks struct {
+// Task はtaskを扱う
+type Task struct {
 	ID       int      `json:"id"`
 	Title    string   `json:"title"`
 	Deadline string   `json:"deadline"`
@@ -38,8 +38,8 @@ func init() {
 }
 
 // CallTasks はデータベースからタスク一覧を取り出す関数
-func CallTasks() ([]Tasks, error) {
-	tasks := make([]Tasks, 0)
+func CallTasks() ([]Task, error) {
+	tasks := make([]Task, 0)
 	id := 0
 	title := ""
 	deadline := ""
@@ -59,7 +59,7 @@ func CallTasks() ([]Tasks, error) {
 		if err != nil {
 			return nil, err
 		}
-		temporaryTask := Tasks{ID: id, Title: title, Deadline: deadline, Users: users}
+		temporaryTask := Task{ID: id, Title: title, Deadline: deadline, Users: users}
 		tasks = append(tasks, temporaryTask)
 	}
 

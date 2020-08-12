@@ -7,8 +7,9 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", apifuncs.Test)
+	http.HandleFunc("/", apifuncs.Response)
 	http.HandleFunc("/test", apifuncs.DBTest)
+
 
 	http.ListenAndServe(":80", nil)
 }

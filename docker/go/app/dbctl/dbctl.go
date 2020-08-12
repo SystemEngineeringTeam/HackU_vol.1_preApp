@@ -190,11 +190,49 @@ func linkTaskIDAndUserID(taskID, userID int) error {
 func DeleteTask(id int) error {
 	_, err := db.Query("delete from tasks where id = ?", id)
 	if err != nil {
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
 		return err
 	}
 	_, err = db.Query("delete from links_table where task_id = ?", id)
 	if err != nil {
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
 		return err
+	}
+
+	return nil
+}
+
+// PutTasks は登録してあるタスクを更新する関数
+func PutTasks(task Task) error {
+	_, err := db.Query("update tasks set title=?,deadline=? where id=?", task.Title, task.Deadline, task.ID)
+	if err != nil {
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
+		return err
+	}
+
+	_, err = db.Query("delete from links_table where task_id=?", task.ID)
+	if err != nil {
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
+		return err
+	}
+
+	for _, name := range task.Users {
+		userID, err := callUserIDFromName(name)
+		if err != nil {
+			pc, file, line, _ := runtime.Caller(0)
+			f := runtime.FuncForPC(pc)
+			log.Printf(errFormat, err, f.Name(), file, line)
+			return err
+		}
+		linkTaskIDAndUserID(task.ID, userID)
 	}
 
 	return nil

@@ -11,7 +11,6 @@
         persistent-hint
       ></v-select>
     </v-col>
-      {{users}}
   </v-row>
 </template>
 

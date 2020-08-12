@@ -2,8 +2,8 @@
   <v-card>
     <v-card-text>
       <v-text-field v-model="title" label="title" required></v-text-field>
-      <DeadlinePicker />
-      <UserSelecter />
+      <DeadlinePicker :state="this.$store.state.post" :stateStr="stateStr"/>
+      <UserSelecter :state="this.$store.state.post" :stateStr="stateStr"/>
     </v-card-text>
     <v-card-actions>
       <v-btn color="primary" @click="postTask">
@@ -28,6 +28,7 @@ export default {
   data: () => ({
     picker: "",
     datePick: false,
+    stateStr: "Post"
   }),
   methods: {
     postTask() {
@@ -38,6 +39,21 @@ export default {
       this.$store.commit("setPostDeadlineDate",null);
       this.$store.commit("setPostDeadlineTime",null);
       this.$store.commit("setPostUser",[]);
+    },
+    post() {
+      //このメソッドが実行された時点でAPIを用いた通信をしなければならない
+      let deadline = this.$store.state.post.deadlineDate + " " + this.$store.state.post.deadlineTime
+      let task = {
+        id: 12345,//ここのIDは後ほどちゃんと実装する
+        title: this.$store.state.post.title,
+        deadline: deadline,
+        users: this.$store.state.post.users
+      };
+      let tasks = this.$store.state.tasks;
+      tasks.push(task);
+      this.$store.commit("setTasks",tasks);
+      this.allReset();
+      // console.log(this.$store.state.tasks);
     }
   },
   computed: {

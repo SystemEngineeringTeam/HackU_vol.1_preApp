@@ -64,6 +64,7 @@
 
 <script>
 export default {
+  props: ['state','stateStr'],
 
   data() {
     return {
@@ -74,30 +75,30 @@ export default {
   computed: {
     date: {
       get() {
-        return this.$store.state.post.deadlineDate;
+        return this.state.deadlineDate;
       },
       set(value) {
-        this.$store.commit("setPostDeadlineDate", value);
+        this.$store.commit("set" + this.stateStr + "DeadlineDate", value);
       },
     },
     time: {
       get(){
-        return this.$store.state.post.deadlineTime
+        return this.state.deadlineTime
       },
       set(value){
-        this.$store.commit("setPostDeadlineTime", value);
+        this.$store.commit("set" + this.stateStr + "DeadlineTime", value);
       }
     }
   },
   methods: {
     resetDeadline: function() {
-      this.$store.commit("setPostDeadlineDate", null);
-      this.$store.commit("setPostDeadlineTime", null);
+      this.$store.commit("set" + this.stateStr + "DeadlineDate", null);
+      this.$store.commit("set" + this.stateStr + "DeadlineTime", null);
     },
 
     dateInitial: function() {
-      if (this.$store.state.post.deadlineDate === null) {
-        this.$store.commit("setPostDeadlineDate",new Date().toISOString().substr(0, 10));
+      if (this.state.deadlineDate === null) {
+        this.$store.commit("set" + this.stateStr + "DeadlineDate",new Date().toISOString().substr(0, 10));
       }
     },
   },

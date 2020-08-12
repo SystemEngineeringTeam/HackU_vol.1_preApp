@@ -6,12 +6,18 @@ import (
 	"runtime"
 )
 
-// Tasks は/taskでメソッドがgetだったら返す
-type Tasks struct {
+// Task はタスクを扱う構造体
+type Task struct {
 	ID       int      `json:"id"`
 	Title    string   `json:"title"`
 	Deadline string   `json:"deadline"`
 	Users    []string `json:"users"`
+}
+
+// User はユーザーを扱う構造体
+type User struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 //エラーの内容:err 関数の名前:f.Name() ファイルのパス:file runtimeが呼ばれた行数:line
@@ -36,8 +42,8 @@ func init() {
 }
 
 // CallTasks はデータベースからタスク一覧を取り出す関数
-func CallTasks() ([]Tasks, error) {
-	tasks := make([]Tasks, 0)
+func CallTasks() ([]Task, error) {
+	tasks := make([]Task, 0)
 	id := 0
 	title := ""
 	deadline := ""
@@ -57,7 +63,7 @@ func CallTasks() ([]Tasks, error) {
 		if err != nil {
 			return nil, err
 		}
-		temporaryTask := Tasks{ID: id, Title: title, Deadline: deadline, Users: users}
+		temporaryTask := Task{ID: id, Title: title, Deadline: deadline, Users: users}
 		tasks = append(tasks, temporaryTask)
 	}
 
@@ -108,7 +114,7 @@ func callUserNameFromUserID(userID int) (string, error) {
 }
 
 // RegisterNewTask はデータベースにタスクを追加する関数です
-func RegisterNewTask(task Tasks) (int, error) {
+func RegisterNewTask(task Task) (int, error) {
 	_, err := db.Query("insert into tasks(title,deadline) values (?,?)", task.Title, task.Deadline)
 	if err != nil {
 		log.Fatal(err)
@@ -182,4 +188,24 @@ func DeleteTask(id int) error {
 	}
 
 	return nil
+}
+
+// CallUsers はユーザー一覧を返す関数
+func CallUsers() ([]User, error) {
+	rows, err := db.Query("select id,name from users")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	users := make([]User, 0)
+
+	for rows.Next() {
+		temporaryUser := User{}
+		rows.Scan(&temporaryUser.ID, &temporaryUser.Name)
+
+		users = append(users, temporaryUser)
+	}
+
+	return users, nil
 }

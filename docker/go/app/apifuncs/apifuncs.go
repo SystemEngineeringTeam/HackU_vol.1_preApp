@@ -71,6 +71,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		//jsonを読み込む
 		jsonBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Println("io error")
 			return
 		}
@@ -113,6 +114,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			fmt.Println(err)
+			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
 		task.ID = pathNumber
@@ -120,6 +122,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		//jsonを読み込み
 		jsonBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
 			//io(input,output)
 			fmt.Println("io error")
 			return
@@ -144,11 +147,14 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		//文字列を数字に変換
 		if err != nil {
 			//エラー処理
+			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Println(err)
 			return
 		}
 
 		if err := dbctl.DeleteTask(idNum); err != nil {
+
+			w.WriteHeader(http.StatusServiceUnavailable)
 			//エラー処理
 			fmt.Println(err)
 			return

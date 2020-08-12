@@ -1,6 +1,9 @@
 <template>
   <v-container>
     <v-row class="text-center">
+      <v-col cols="12">
+        <PostTaskForm />
+      </v-col>
       <v-col cols="12" v-for="(task, i) in sample" :key="i">
         <Task :task="task" :users="findUser(task.users_id)" />
       </v-col>
@@ -10,22 +13,14 @@
 
 <script>
 import Task from "../components/Task";
+import PostTaskForm from "../components/PostTaskForm";
 
 export default {
   name: "ToDo",
 
   components: {
     Task,
-  },
-
-  methods: {
-    findUser: function(taskUser) {
-      let re = [];
-      for (var i = 0; i < taskUser.length; i++) {
-        re.push(this.users.find((element) => element.id == taskUser[i]).name);
-      }
-      return re;
-    },
+    PostTaskForm,
   },
 
   data: () => ({
@@ -56,5 +51,20 @@ export default {
       { id: 3, name: "とやま" },
     ],
   }),
+
+  methods: {
+    findUser: function(taskUser) {
+      let re = [];
+      for (var i = 0; i < taskUser.length; i++) {
+        re.push(this.users.find((element) => element.id == taskUser[i]).name);
+      }
+      return re;
+    },
+  },
+  created() {
+    this.axios
+      .get("http://localhost:80/")
+      .then((response) => console.log(response));
+  },
 };
 </script>

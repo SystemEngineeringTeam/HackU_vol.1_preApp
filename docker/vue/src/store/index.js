@@ -6,27 +6,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    tasks: [
-      {
-        id: 0,
-        title: "醤油をかける",
-        deadline: "2020-08-24 09:00",
-        users: ["秦", "福田"],
-      },
-      {
-        id: 1,
-        title: "ペットの散歩",
-        deadline: "2020-08-24 15:00",
-        users: ["福田", "相畑", "外山"],
-      },
-      {
-        id: 2,
-        title: "スカイダイビング",
-        deadline: "2020-08-11 15:00",
-        users: ["相畑"],
-      },
-    ],
-    users: ["秦", "福田", "外山", "相畑"],
+    tasks: [],
+    users: [],
     post: {
       title: "",
       deadlineDate: null,
@@ -38,8 +19,8 @@ export default new Vuex.Store({
     setTasks(state, tasks) {
       state.tasks = tasks;
     },
-    removeTask(state, index){
-      state.tasks.splice(index,1);
+    removeTask(state, index) {
+      state.tasks.splice(index, 1);
     },
     setUsers(state, users) {
       state.users = users;
@@ -92,7 +73,17 @@ export default new Vuex.Store({
       console.log(post_json);
       await axios
         .post(process.env.VUE_APP_URL_TASKS, post_json)
-        .then((res) => context.commit("setUsers", res.data));
+        .then((res) => console.log(res));
+    },
+    async deleteTask(context, id) {
+      await axios.delete(process.env.VUE_APP_URL_TASKS + id).then((res) => {
+        if (res.status == 200) {
+          const index = context.state.tasks.findIndex(
+            (element) => element.id === id
+          );
+          context.commit("removeTask", index);
+        }
+      });
     },
   },
   modules: {},

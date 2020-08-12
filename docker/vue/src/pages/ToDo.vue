@@ -26,6 +26,7 @@ export default {
   data: () => ({}),
   created() {
     this.$store.dispatch("setTasks")
+    this.$store.dispatch("setUsers")
   },
 };
 </script>

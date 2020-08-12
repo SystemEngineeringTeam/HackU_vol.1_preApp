@@ -63,7 +63,7 @@ export default {
   },
   created() {
     this.axios
-      .get("http://localhost:8808/")
+      .get("http://localhost:80/")
       .then((response) => console.log(response));
   },
 };

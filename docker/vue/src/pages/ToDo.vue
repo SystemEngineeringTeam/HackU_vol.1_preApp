@@ -61,10 +61,10 @@ export default {
       return re;
     },
   },
-  // created() {
-  //   this.axios
-  //     .get("https://api.coindesk.com/v1/bpi/currentprice.json")
-  //     .then((response) => console.log(response));
-  // },
+  created() {
+    this.axios
+      .get("http://localhost:8808/")
+      .then((response) => console.log(response));
+  },
 };
 </script>

@@ -4,16 +4,20 @@ import (
 	"database/sql"
 	"log"
 	"runtime"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
-// Task はtaskを扱う
+// Task はタスクを扱う構造体
 type Task struct {
 	ID       int      `json:"id"`
 	Title    string   `json:"title"`
 	Deadline string   `json:"deadline"`
 	Users    []string `json:"users"`
+}
+
+// User はユーザーを扱う構造体
+type User struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 //エラーの内容:err 関数の名前:f.Name() ファイルのパス:file runtimeが呼ばれた行数:line
@@ -107,4 +111,101 @@ func callUserNameFromUserID(userID int) (string, error) {
 
 	}
 	return name, nil
+}
+
+// RegisterNewTask はデータベースにタスクを追加する関数です
+func RegisterNewTask(task Task) (int, error) {
+	_, err := db.Query("insert into tasks(title,deadline) values (?,?)", task.Title, task.Deadline)
+	if err != nil {
+		log.Fatal(err)
+		return -1, err
+	}
+
+	rows, err := db.Query("select id from tasks where title=?", task.Title)
+	if err != nil {
+		log.Fatal(err)
+		return -1, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		rows.Scan(&task.ID)
+	}
+
+	userIDs := make([]int, 0)
+
+	for _, name := range task.Users {
+		id, err := callUserIDFromName(name)
+		if err != nil {
+			return -1, err
+		}
+
+		userIDs = append(userIDs, id)
+	}
+
+	for _, u := range userIDs {
+		err := linkTaskIDAndUserID(task.ID, u)
+		if err != nil {
+			return -1, err
+		}
+	}
+
+	return task.ID, nil
+}
+
+func callUserIDFromName(name string) (int, error) {
+	rows, err := db.Query("select id from users where name=?", name)
+	if err != nil {
+		return -1, err
+	}
+	defer rows.Close()
+
+	id := 0
+	for rows.Next() {
+		rows.Scan(&id)
+	}
+
+	return id, nil
+}
+
+func linkTaskIDAndUserID(taskID, userID int) error {
+	_, err := db.Query("insert into links_table(task_id,user_id)", taskID, userID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// DeleteTask はデータベースからタスクを削除する関数です
+func DeleteTask(id int) error {
+	_, err := db.Query("delete from tasks where id = ?", id)
+	if err != nil {
+		return err
+	}
+	_, err = db.Query("delete from links_table where task_id = ?", id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// CallUsers はユーザー一覧を返す関数
+func CallUsers() ([]User, error) {
+	rows, err := db.Query("select id,name from users")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	users := make([]User, 0)
+
+	for rows.Next() {
+		temporaryUser := User{}
+		rows.Scan(&temporaryUser.ID, &temporaryUser.Name)
+
+		users = append(users, temporaryUser)
+	}
+
+	return users, nil
 }

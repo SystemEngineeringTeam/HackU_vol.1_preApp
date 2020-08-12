@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", apifuncs.TaskResponse)
-	http.HandleFunc("/test", apifuncs.DBTest)
+	http.HandleFunc("/tasks/", apifuncs.TaskResponse)
+	http.HandleFunc("/users/", apifuncs.UsersResponse)
 
 	http.ListenAndServe(":80", nil)
 }

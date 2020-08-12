@@ -13,7 +13,7 @@
     </v-card-text>
     <v-card-actions class="justify-center">
       <v-btn @click="updateTask">更新</v-btn>
-      <v-btn @click="deleteTask">削除</v-btn>
+      <v-btn @click="deleteTask(task.id)">削除</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -25,10 +25,6 @@ export default {
   data: () => ({}),
 
   methods: {
-    deleteTask: function(){
-      let index = this.$store.state.tasks.findIndex(element => element.id === this.task.id);
-      this.$store.commit("removeTask",index);
-    },
     updateTask: function(){
       this.$store.commit("setUpdateID",this.task.id);
       this.$store.commit("setUpdateTitle",this.task.title);
@@ -37,6 +33,9 @@ export default {
       this.$store.commit("setUpdateDeadlineTime",str[1]);
       this.$store.commit("setUpdateUser",this.task.users);
       this.$store.commit("setFormFlag",true);
+    },
+    deleteTask: function(id){
+      this.$store.dispatch("deleteTask", id)
     }
   },
 };

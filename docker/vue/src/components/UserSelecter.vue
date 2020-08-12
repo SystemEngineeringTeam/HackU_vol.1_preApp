@@ -2,8 +2,8 @@
   <v-row>
     <v-col cols="12" sm="6">
       <v-select
-        v-model="users"
-        :items="$store.state.users"
+        v-model="postUsers"
+        :items="users"
         :menu-props="{ maxHeight: '400' }"
         label="Select"
         multiple
@@ -20,7 +20,10 @@ export default {
 
   data: () => ({}),
   computed: {
-    users: {
+    users(){
+      return this.$store.state.users.map(user => user.name);
+    },
+    postUsers: {
       get() {
         return this.state.users;
       },

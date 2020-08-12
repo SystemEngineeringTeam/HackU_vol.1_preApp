@@ -79,7 +79,7 @@ export default new Vuex.Store({
         .get(process.env.VUE_APP_URL_USERS)
         .then((res) => context.commit("setUsers", res.data));
     },
-    allReset(context) { 
+    postAllReset(context) { 
       context.commit("setPostTitle","");
       context.commit("setPostDeadlineDate",null);
       context.commit("setPostDeadlineTime",null);
@@ -122,7 +122,7 @@ export default new Vuex.Store({
           let tasks = context.state.tasks;
           tasks.push(task);
           context.commit("setTasks", tasks);
-          context.dispatch("allReset")
+          context.dispatch("postAllReset")
         }
       });
     },

@@ -2,8 +2,8 @@
   <v-card>
     <v-card-text>
       <v-text-field v-model="title" label="title" required></v-text-field>
-      <DeadlinePicker />
-      <UserSelecter />
+      <DeadlinePicker :state="this.$store.state.post" :stateStr="stateStr"/>
+      <UserSelecter :state="this.$store.state.post" :stateStr="stateStr"/>
     </v-card-text>
     <v-card-actions>
       <v-btn color="primary" @click="test">
@@ -28,6 +28,7 @@ export default {
   data: () => ({
     picker: "",
     datePick: false,
+    stateStr: "Post"
   }),
   methods: {
     test() {
@@ -41,7 +42,7 @@ export default {
       this.$store.commit("setPostDeadlineDate",null);
       this.$store.commit("setPostDeadlineTime",null);
       this.$store.commit("setPostUser",[]);
-    }
+    },
   },
   computed: {
     title: {

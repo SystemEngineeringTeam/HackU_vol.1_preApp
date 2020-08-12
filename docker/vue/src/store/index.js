@@ -33,6 +33,14 @@ export default new Vuex.Store({
       deadlineTime: null,
       users: [],
     },
+    update: {
+      id: null,
+      title: "",
+      deadlineDate: null,
+      deadlineTime: null,
+      users: [],
+    },
+    formFlag: false
   },
   mutations: {
     setTasks(state, tasks) {
@@ -55,6 +63,24 @@ export default new Vuex.Store({
     },
     setPostUser(state, users) {
       state.post.users = users;
+    },
+    setUpdateID(state, id) {
+      state.update.id = id;
+    },
+    setUpdateTitle(state, title) {
+      state.update.title = title;
+    },
+    setUpdateDeadlineDate(state, date) {
+      state.update.deadlineDate = date;
+    },
+    setUpdateDeadlineTime(state, time) {
+      state.update.deadlineTime = time;
+    },
+    setUpdateUser(state, users) {
+      state.update.users = users;
+    },
+    setFormFlag(state, formFlag){
+      state.formFlag = formFlag;
     },
   },
   actions: {

@@ -16,14 +16,16 @@
 
 <script>
 export default {
+  props: ['state','stateStr'],
+
   data: () => ({}),
   computed: {
     users: {
       get() {
-        return this.$store.state.post.users;
+        return this.state.users;
       },
       set(value) {
-        this.$store.commit("setPostUser", value);
+        this.$store.commit("set" + this.stateStr + "User", value);
       }
     }
   }

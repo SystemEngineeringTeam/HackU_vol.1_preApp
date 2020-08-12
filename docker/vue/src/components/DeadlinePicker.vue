@@ -57,12 +57,16 @@
         ></v-time-picker>
       </v-menu>
     </v-col>
+    <v-col cols="5">
+      <v-btn @click="resetDeadline">リセット</v-btn>
+    </v-col>
   </v-row>
 </template>
 
 <script>
 export default {
-  //props: ['time'],
+  //props: ['time','date'],
+
   data() {
     return {
       date: new Date().toISOString().substr(0, 10),
@@ -71,6 +75,11 @@ export default {
       timePick: false,
     };
   },
-  methods: {},
+  methods: {
+    resetDeadline: function(){
+      this.date = null;
+      this.time = null;
+    }
+  },
 };
 </script>

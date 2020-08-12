@@ -41,7 +41,7 @@ values
 insert into
     tasks(title,deadline)
 values
-    ("朝9時に起きる","2020/08/12 09:00:00");
+    ("朝9時に起きる","2020-08-12 09:00:00");
 
 insert into
     links_table(task_id,user_id)

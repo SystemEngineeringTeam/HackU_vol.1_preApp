@@ -138,27 +138,26 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		log.Println("Put Method")
 	} else {
 		//tasks/1 , ""←空文字
-		idString := string.ReplaceAll(r.URL.Path, "/tasks/", "")
-		
-		idNum,err:=strconv.Atoi(idString);		
+		idString := strings.ReplaceAll(r.URL.Path, "/tasks/", "")
+
+		idNum, err := strconv.Atoi(idString)
 		//文字列を数字に変換
-		if err!=nil{
+		if err != nil {
 			//エラー処理
 			fmt.Println(err)
 			return
 		}
 
-		if err:=dbctl.DeleteTask(idnum);err!=nil{
+		if err := dbctl.DeleteTask(idNum); err != nil {
 			//エラー処理
 			fmt.Println(err)
 			return
 		}
-
-		
+	}
 }
 
-// UsersRespnse は/usersに関する処理を行う
-func UsersRespnse(w http.ResponseWriter, r *http.Request) {
+// UsersResponse は/usersに関する処理を行う
+func UsersResponse(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.

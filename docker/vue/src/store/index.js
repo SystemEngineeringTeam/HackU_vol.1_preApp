@@ -38,8 +38,8 @@ export default new Vuex.Store({
     setTasks(state, tasks) {
       state.tasks = tasks;
     },
-    removeTask(state, index){
-      state.tasks.splice(index,1);
+    removeTask(state, index) {
+      state.tasks.splice(index, 1);
     },
     setUsers(state, users) {
       state.users = users;
@@ -67,6 +67,18 @@ export default new Vuex.Store({
       await axios
         .get(process.env.VUE_APP_URL_USERS)
         .then((res) => context.commit("setUsers", res.data));
+    },
+    async deleteTask(context, id) {
+      await axios
+        .delete(process.env.VUE_APP_URL_TASKS + "/" + id)
+        .then((res) => {
+          if (res.status == 200) {
+            const index = context.state.tasks.findIndex(
+              (element) => element.id === id
+            );
+            context.commit("removeTask", index);
+          }
+        });
     },
   },
   modules: {},

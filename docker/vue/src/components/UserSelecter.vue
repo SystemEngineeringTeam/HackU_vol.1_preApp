@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12" sm="6">
       <v-select
-        v-model="userBool"
+        v-model="users"
         :items="$store.state.users"
         :menu-props="{ maxHeight: '400' }"
         label="Select"
@@ -11,6 +11,7 @@
         persistent-hint
       ></v-select>
     </v-col>
+      {{users}}
   </v-row>
 </template>
 
@@ -18,12 +19,13 @@
 export default {
   data: () => ({}),
   computed: {
-    userBool: {
+    users: {
       get() {
-        return this.$store.state.post.deadlineDate;
+        return this.$store.state.post.users;
       },
       set(value) {
-        this.$store.commit("setUserBool", value);
+        this.$store.commit("setPostUser", value);
+        console.log("ちんちん")
       }
     }
   }

@@ -70,7 +70,7 @@ export default new Vuex.Store({
     },
     async deleteTask(context, id) {
       await axios
-        .delete(process.env.VUE_APP_URL_TASKS + "/" + id)
+        .delete(process.env.VUE_APP_URL_TASKS + id)
         .then((res) => {
           if (res.status == 200) {
             const index = context.state.tasks.findIndex(

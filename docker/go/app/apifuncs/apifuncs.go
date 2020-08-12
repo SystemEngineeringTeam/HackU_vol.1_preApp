@@ -6,58 +6,16 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 
 	"set1.ie.aitech.ac.jp/HackU_vol_1/dbctl"
 )
 
-// Test はテスト用
-func Test(w http.ResponseWriter, r *http.Request) {
-
-	// 	if r.Method == http.MethodGet {
-
-	// 		// response := TasksResponseMethodGET{ID: 0, Title: "test", Deadline: "dead", Users: []string{"fukuda", "toyama"}}
-
-	// 		//構造体をバイト配列にする
-	// 		b, _ := json.Marshal(response)
-
-	// 		fmt.Printf("%s\n", string(b))
-
-	// 		//バイトは配列stringにキャスト
-	// 		fmt.Fprintln(w, string(b))
-
-	// 		log.Println("Get Method")
-
-	// 	} else if r.Method == http.MethodPost {
-	// 		fmt.Fprintln(w, "Post Method")
-
-	// 		/* b, err:=ioutil.ReadAll(r.Body)
-	// 		if err !=nil{
-	// 			fmt.Println("io error")
-	// 			return
-	// 		} */
-
-	// 		//jsonBytes := ([]byte)(b)
-
-	// 		/* data:=new(InputJsonSchema)
-	// 		if err:=json.Unmarshal(jsonBytes,data);err!=nil{
-	// 			fmt.Println("JSON Unmarshal error:",err)
-	// 			return
-	// 		} */
-
-	// 		fmt.Fprintf(w, "jsonを受け取りました")
-	// 		/*
-	// 			fmt.Fprintf(w,data.In)
-	// 			fmt.Fprintf(w,data.Name)
-	// 			fmt.Fprintf(w,data.Description)
-	// 			fmt.Fprintf(w,data.Required)
-	// 			fmt.Fprintf(w,data.Responses)	 */
-
-	// 	} else if r.Method == http.MethodPut {
-	// 		fmt.Fprintln(w, "Put Method")
-	// 	} else {
-	// 		fmt.Fprintln(w, "delete Method")
-	// 	}
-}
+// // /tasksのPOSTメソッドに対するレスポンス用構造体
+// //内部のみで使う構造体の先頭は小文字
+// type taskResponseMethodPOST struct {
+// 	ID int `json:"id"`
+// }
 
 //TaskResponse は/tasksに対する処理をする
 func TaskResponse(w http.ResponseWriter, r *http.Request) {
@@ -108,24 +66,37 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, jsonString)
 
 	} else if r.Method == http.MethodPost {
-		fmt.Fprintln(w, "Post Method")
+		log.Println("PostMethod")
 
-		b, err := ioutil.ReadAll(r.Body)
+		//jsonを読み込む
+		jsonBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			fmt.Println("io error")
 			return
 		}
 
-		//jsonでもらう
-		jsonBytes := ([]byte)(b)
+		//構造体の初期化
+		data := dbctl.Task{}
 
-		//構造体
-		data := new(dbctl.Task)
-		if err := json.Unmarshal(jsonBytes, data); err != nil {
+		//処理が終わったらjsonを構造体にする
+		if err := json.Unmarshal(jsonBytes, &data); err != nil {
 			fmt.Println("JSON Unmarshal error:", err)
 			return
 		}
-		fmt.Printf("%+v\n", data)
+
+		//データベースに受けっとた情報を登録
+		n, err := dbctl.RegisterNewTask(data)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		// IDをjsonに変換// "{\"name\":" + strconv.Itoa(n) + "}"がjsonの形式
+		newTaskID := "{\"id\":" + strconv.Itoa(n) + "}"
+		// fmt.Println(newTaskID)
+		//{"id":1234}
+
+		//構造体を返す
+		fmt.Fprintln(w, newTaskID)
 
 		/*
 			fmt.Fprintf(w,data.In)

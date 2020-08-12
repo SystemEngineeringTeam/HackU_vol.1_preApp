@@ -140,7 +140,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 
 		if err := json.Unmarshal(jsonBytes, &task); err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
-			fmt.Println("JSON UNmarashal error", err)
+			fmt.Println("JSON UNmarshal error", err)
 			return
 		}
 		w.WriteHeader(http.StatusOK)

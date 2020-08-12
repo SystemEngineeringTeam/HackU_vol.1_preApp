@@ -117,13 +117,17 @@ func callUserNameFromUserID(userID int) (string, error) {
 func RegisterNewTask(task Task) (int, error) {
 	_, err := db.Query("insert into tasks(title,deadline) values (?,?)", task.Title, task.Deadline)
 	if err != nil {
-		log.Fatal(err)
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
 		return -1, err
 	}
 
 	rows, err := db.Query("select id from tasks where title=?", task.Title)
 	if err != nil {
-		log.Fatal(err)
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
 		return -1, err
 	}
 	defer rows.Close()
@@ -156,6 +160,9 @@ func RegisterNewTask(task Task) (int, error) {
 func callUserIDFromName(name string) (int, error) {
 	rows, err := db.Query("select id from users where name=?", name)
 	if err != nil {
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
 		return -1, err
 	}
 	defer rows.Close()
@@ -169,8 +176,11 @@ func callUserIDFromName(name string) (int, error) {
 }
 
 func linkTaskIDAndUserID(taskID, userID int) error {
-	_, err := db.Query("insert into links_table(task_id,user_id)", taskID, userID)
+	_, err := db.Query("insert into links_table(task_id,user_id) values(?,?)", taskID, userID)
 	if err != nil {
+		pc, file, line, _ := runtime.Caller(0)
+		f := runtime.FuncForPC(pc)
+		log.Printf(errFormat, err, f.Name(), file, line)
 		return err
 	}
 	return nil

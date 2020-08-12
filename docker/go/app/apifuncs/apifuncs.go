@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 
 	"set1.ie.aitech.ac.jp/HackU_vol_1/dbctl"
 )
@@ -89,8 +90,9 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 
-		// IDをjsonに変換// "{\"name\":" + string(n) + "}"がjsonの形式
-		newTaskID := "{\"id\":" + string(n) + "}"
+		// IDをjsonに変換// "{\"name\":" + strconv.Itoa(n) + "}"がjsonの形式
+		newTaskID := "{\"id\":" + strconv.Itoa(n) + "}"
+		// fmt.Println(newTaskID)
 		//{"id":1234}
 
 		//構造体を返す

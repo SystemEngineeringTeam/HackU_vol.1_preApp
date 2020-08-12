@@ -26,10 +26,8 @@ export default {
 
   methods: {
     deleteTask: function(){
-      var result = this.$store.state.tasks.filter(function( item ){
-        return item.id !== this.task.id;
-      },this);
-      this.$store.commit("setTasks", result);
+      let index = this.$store.state.tasks.findIndex(element => element.id === this.task.id);
+      this.$store.commit("removeTask",index);
     }
   },
 };

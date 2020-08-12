@@ -1,12 +1,18 @@
-FROM node:12.16.1
-WORKDIR /usr/src/app
-ADD . /usr/src/app
+FROM node:lts-alpine3.12
+WORKDIR /app
 
-RUN  mkdir ~/.npm-global&&\
-    npm config set prefix '~/.npm-global'
+COPY package.json .
+COPY yarn.lock .
 
-ENV PATH=~/.npm-global/bin:$PATH
+# RUN  mkdir ~/.npm-global&&\
+#     npm config set prefix '~/.npm-global'
 
-RUN yarn global add @vue/cli&&\
+# ENV PATH=~/.npm-global/bin:$PATH
+
+RUN apk update && \
+    yarn global add @vue/cli && \
     yarn install
-CMD ["yarn","serve"]
+
+# RUN yarn global add @vue/cli&&\
+#     yarn install
+# CMD ["yarn","serve"]

@@ -27,9 +27,10 @@ services:
             WAIT_HOSTS: mysql
     vue:
         build: ./vue
-        volumes:
-            - "./vue:/app"
         container_name: vue
+        volumes:
+            - ./vue:/app
+        working_dir: /app
         ports:
             - "8080:8080"
         command:

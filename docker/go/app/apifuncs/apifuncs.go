@@ -42,7 +42,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		// one:=retOne()
 
 		//セキリティ設定
-		w.Header().Set("Access-Control-Allow-Origin", r.RemoteAddr)              // Allow remote access.
+		w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
 
 		tasks, err := dbctl.CallTasks()

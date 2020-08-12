@@ -50,6 +50,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			log.Fatal(err)
 		}
+		w.WriteHeader(http.StatusOK)
 
 		// 受け取った配列をJSONに変換
 		jsonBytes, err := json.Marshal(tasks)
@@ -75,21 +76,25 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("io error")
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 
 		//構造体の初期化
 		data := dbctl.Task{}
 
 		//処理が終わったらjsonを構造体にする
 		if err := json.Unmarshal(jsonBytes, &data); err != nil {
+
 			fmt.Println("JSON Unmarshal error:", err)
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 
 		//データベースに受けっとた情報を登録
 		n, err := dbctl.RegisterNewTask(data)
 		if err != nil {
 			fmt.Println(err)
 		}
+		w.WriteHeader(http.StatusOK)
 
 		// IDをjsonに変換// "{\"name\":" + strconv.Itoa(n) + "}"がjsonの形式
 		newTaskID := "{\"id\":" + strconv.Itoa(n) + "}"
@@ -117,6 +122,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 		task.ID = pathNumber
 
 		//jsonを読み込み
@@ -127,16 +133,21 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("io error")
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 
 		if err := json.Unmarshal(jsonBytes, &task); err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Println("JSON UNmarashal error", err)
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 
 		if err := dbctl.PutTasks(task); err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Println(err)
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 
 		log.Println("Put Method")
 	} else {
@@ -151,6 +162,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 
 		if err := dbctl.DeleteTask(idNum); err != nil {
 
@@ -159,6 +171,7 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 	}
 }
 
@@ -174,6 +187,7 @@ func UsersResponse(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			log.Fatal(err)
 		}
+		w.WriteHeader(http.StatusOK)
 
 		//jsonに変換//byte？
 		jsonBytes, err := json.Marshal(users)
@@ -181,6 +195,7 @@ func UsersResponse(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			log.Fatal(err)
 		}
+		w.WriteHeader(http.StatusOK)
 		jsonstring := string(jsonBytes)
 
 		// httpステータスコードを返す<-New

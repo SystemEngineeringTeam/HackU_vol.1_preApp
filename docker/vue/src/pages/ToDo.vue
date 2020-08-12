@@ -25,9 +25,7 @@ export default {
 
   data: () => ({}),
   created() {
-    this.axios
-      .get("http://localhost:80/")
-      .then((response) => console.log(response));
+    this.$store.dispatch("setTasks")
   },
 };
 </script>

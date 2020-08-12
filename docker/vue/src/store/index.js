@@ -62,7 +62,7 @@ export default new Vuex.Store({
   actions: {
     async setTasks(context) {
       await axios
-        .get("http://localhost:3000")
+        .get(process.env.VUE_APP_URL_TASKS)
         .then((res) => context.setTasks(res.data));
     },
     async setUsers(context) {

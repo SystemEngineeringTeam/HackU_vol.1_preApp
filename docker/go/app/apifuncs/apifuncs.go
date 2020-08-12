@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"set1.ie.aitech.ac.jp/HackU_vol_1/dbctl"
 )
@@ -105,14 +106,58 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w,data.Responses)	 */
 
 	} else if r.Method == http.MethodPut {
-		fmt.Fprintln(w, "Put Method")
-	} else {
-		fmt.Fprintln(w, "delete Method")
-	}
+		//構造体の初期化
+		task := dbctl.Task{}
+		pathString := strings.ReplaceAll(r.URL.Path, "/tasks/", "")
+		pathNumber, err := strconv.Atoi(pathString)
 
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		task.ID = pathNumber
+
+		//jsonを読み込み
+		jsonBytes, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			//io(input,output)
+			fmt.Println("io error")
+			return
+		}
+
+		if err := json.Unmarshal(jsonBytes, &task); err != nil {
+			fmt.Println("JSON UNmarashal error", err)
+			return
+		}
+
+		if err := dbctl.PutTasks(task); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		log.Println("Put Method")
+	} else {
+		//tasks/1 , ""←空文字
+		idString := string.ReplaceAll(r.URL.Path, "/tasks/", "")
+		
+		idNum,err:=strconv.Atoi(idString);		
+		//文字列を数字に変換
+		if err!=nil{
+			//エラー処理
+			fmt.Println(err)
+			return
+		}
+
+		if err:=dbctl.DeleteTask(idnum);err!=nil{
+			//エラー処理
+			fmt.Println(err)
+			return
+		}
+
+		
 }
 
-//UsersRespnse は/usersに関する処理を行う
+// UsersRespnse は/usersに関する処理を行う
 func UsersRespnse(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.

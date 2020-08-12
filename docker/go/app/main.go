@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/tasks", apifuncs.TaskResponse)
+	http.HandleFunc("/tasks/", apifuncs.TaskResponse)
 	http.HandleFunc("/users", apifuncs.UsersRespnse)
 	http.HandleFunc("/test", apifuncs.DBTest)
 

@@ -19,6 +19,9 @@ import (
 
 //TaskResponse は/tasksに対する処理をする
 func TaskResponse(w http.ResponseWriter, r *http.Request) {
+	//セキリティ設定
+	w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
 
 	if r.Method == http.MethodGet {
 
@@ -40,10 +43,6 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 
 		// retOne()
 		// one:=retOne()
-
-		//セキリティ設定
-		w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
 
 		tasks, err := dbctl.CallTasks()
 		if err != nil {
@@ -109,6 +108,36 @@ func TaskResponse(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Put Method")
 	} else {
 		fmt.Fprintln(w, "delete Method")
+	}
+
+}
+
+//UsersRespnse は/usersに関する処理を行う
+func UsersRespnse(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")                       // Allow any access.
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Allowed methods.
+
+	if r.Method == http.MethodGet {
+		users, err := dbctl.CallUsers()
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			log.Fatal(err)
+		}
+
+		//jsonに変換//byte？
+		jsonBytes, err := json.Marshal(users)
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			log.Fatal(err)
+		}
+		jsonstring := string(jsonBytes)
+
+		// httpステータスコードを返す<-New
+		w.WriteHeader(http.StatusOK)
+		// JSONを返す
+		fmt.Fprintln(w, jsonstring)
+
 	}
 
 }

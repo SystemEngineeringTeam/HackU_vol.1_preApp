@@ -38,6 +38,9 @@ export default new Vuex.Store({
     setTasks(state, tasks) {
       state.tasks = tasks;
     },
+    removeTask(state, index){
+      state.tasks.splice(index,1);
+    },
     setUsers(state, users) {
       state.users = users;
     },

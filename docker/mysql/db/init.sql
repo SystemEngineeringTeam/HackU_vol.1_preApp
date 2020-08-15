@@ -1,3 +1,6 @@
+SET CHARSET UTF8;
+CREATE DATABASE IF NOT EXISTS pre_app_db DEFAULT CHARACTER SET utf8;
+
 use pre_app_db;
 
 create table users(
